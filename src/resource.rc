@@ -1,0 +1,10 @@
+#include "resource.h"
+
+IDI_MAIN_ICON   ICON    "IDM.ico"
+IDR_IDM_RESET   RCDATA  "idm_reset.reg"
+IDR_IDM_TRIAL   RCDATA  "idm_trial.reg"
+IDR_IDM_REG     RCDATA  "idm_reg.reg"
+IDR_SETACL32    RCDATA  "SetACLx32.exe"
+IDR_SETACL64    RCDATA  "SetACLx64.exe"
+
+1 RT_MANIFEST "app.manifest"
