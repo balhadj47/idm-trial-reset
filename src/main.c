@@ -1,11 +1,9 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <commctrl.h>
+#include <shellapi.h>
 #include "core.h"
 #include "resource.h"
-
-#pragma comment(lib, "comctl32.lib")
-#pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
 /* Control IDs */
 #define IDC_TAB         200
@@ -21,6 +19,9 @@ static HWND g_hTab, g_hBtnReset, g_hChkAuto;
 static HWND g_hBtnReg, g_hLblReg;
 static HWND g_hLblHelp, g_hBtnForum, g_hBtnUpdate;
 static HWND g_hWnd;
+
+static WCHAR    g_inputResult[256];
+static INT_PTR  ShowInputBox(HWND hParent);
 
 static void ShowTab(int idx)
 {
@@ -191,8 +192,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 }
 
 /* Simple input dialog for register name */
-static WCHAR g_inputResult[256];
-static HWND  g_hInputEdit;
 
 static INT_PTR CALLBACK InputDlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -218,14 +217,6 @@ static INT_PTR CALLBACK InputDlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 static INT_PTR ShowInputBox(HWND hParent)
 {
     /* Build dialog template in memory */
-    #pragma pack(push, 1)
-    typedef struct {
-        DLGTEMPLATE tmpl;
-        WORD menu, cls, title;
-        /* controls follow */
-    } DlgHdr;
-    #pragma pack(pop)
-
     BYTE dlgBuf[512] = {0};
     DLGTEMPLATE *dt = (DLGTEMPLATE *)dlgBuf;
     dt->style = DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_SETFONT;
@@ -322,7 +313,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpCmd, int nShow)
     wc.lpfnWndProc   = WndProc;
     wc.hInstance     = hInst;
     wc.hIcon         = LoadIconW(hInst, MAKEINTRESOURCEW(IDI_MAIN_ICON));
-    wc.hCursor       = LoadCursorW(NULL, IDC_ARROW);
+    wc.hCursor       = LoadCursorW(NULL, (LPCWSTR)IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);
     wc.lpszClassName = L"IDMTrialReset";
     RegisterClassExW(&wc);

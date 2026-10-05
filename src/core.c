@@ -1,5 +1,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <shellapi.h>
 #include <wininet.h>
 #include <shlwapi.h>
 #include <stdio.h>
@@ -7,8 +8,6 @@
 #include "core.h"
 #include "resource.h"
 
-#pragma comment(lib, "wininet.lib")
-#pragma comment(lib, "shlwapi.lib")
 
 WCHAR g_setacl[MAX_PATH];
 WCHAR g_tempDir[MAX_PATH];
@@ -27,7 +26,7 @@ static WCHAR g_dynkey[128]; /* allkeys[4] */
 
 static BOOL ExtractResource(HMODULE hMod, int resId, LPCWSTR destPath)
 {
-    HRSRC   hRes  = FindResourceW(hMod, MAKEINTRESOURCEW(resId), RT_RCDATA);
+    HRSRC   hRes  = FindResourceW(hMod, MAKEINTRESOURCEW(resId), MAKEINTRESOURCEW(10) /* RT_RCDATA */);
     if (!hRes) return FALSE;
     HGLOBAL hData = LoadResource(hMod, hRes);
     if (!hData) return FALSE;
